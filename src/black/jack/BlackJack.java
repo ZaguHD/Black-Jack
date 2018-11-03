@@ -49,5 +49,3 @@ public class BlackJack extends Application {
     }
     
 }
-
-test
