@@ -5,6 +5,8 @@
  */
 package black.jack.src;
 
+import black.jack.src.enumSrc.Rank;
+import black.jack.src.enumSrc.Suit;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +38,14 @@ public class Cardset {
 
     /*Methods*/
     public void makeSet() {
+        for (int i = 0; i < 3; i++) {
+            for(Suit suit : Suit.values()){
+                for(Rank rank : Rank.values()){
+                    cardset.add(new Card(suit,rank));
+                    System.out.println(cardset.get(cardset.size()-1).getName());
+                }  
+            }
+        }
     }
     
     public void getRandom(){    

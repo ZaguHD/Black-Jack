@@ -22,6 +22,7 @@ public class GameCr implements Initializable {
     private ArrayList<Person> person = new ArrayList<>();
     private Cardset cardset;
     private boolean endOfGame;
+    private BlackJack manager;
 
     
     /*Constructor*/
@@ -58,6 +59,7 @@ public class GameCr implements Initializable {
 
     /*Methods*/
     public void startAGame() {
+        cardset = new Cardset();
     }
 
     
@@ -69,5 +71,13 @@ public class GameCr implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+    
+    void setMainApp(BlackJack manager){
+        this.manager = manager;
+    }
+    
+    public GameCr getMe(){
+        return this;
+    }
     
 }

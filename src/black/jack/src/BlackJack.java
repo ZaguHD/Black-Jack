@@ -5,11 +5,15 @@
  */
 package black.jack.src;
 
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -18,27 +22,28 @@ import javafx.stage.Stage;
  * @author emazi
  */
 public class BlackJack extends Application {
+    private Stage gameStage;
+    private GameCr gameCr = new GameCr();
+    private Scene sceneGameCr;
     
     @Override
-    public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+    public void start(Stage primaryStage) throws IOException {
+        this.gameStage = new Stage();
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/FXMLGame.fxml"));
+        Parent root = loader.load();
         
-        Scene scene = new Scene(root, 300, 250);
+        GameCr controller = loader.getController();
+        controller.setMainApp(this);
+        gameCr = controller.getMe(); //Klasse bekannt machen
         
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        this.sceneGameCr = new Scene(root);
+        this.gameStage.setTitle("BlackJack");
+        this.gameStage.setScene(sceneGameCr);
+        this.gameStage.setResizable(false); // Benutzer kann die Grösse des Fensters nicht ändern
+        this.gameStage.show();       
+        gameCr.startAGame();
     }
 
     /**
@@ -47,5 +52,6 @@ public class BlackJack extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+    
     
 }
