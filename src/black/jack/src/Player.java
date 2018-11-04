@@ -51,6 +51,14 @@ public class Player extends Person{
         
     }
     
+    //Split possible
+    public void isSplitPossible(){
+        
+    }
     
+    //Double possible
+    public void isDoublePossible() {
+        
+    }
       
 }
