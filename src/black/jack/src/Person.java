@@ -16,7 +16,7 @@ public abstract class Person {
     
     /*Variable*/
     private int id;
-    private MyCard card[] = new MyCard[2];
+    protected MyCard card[] = new MyCard[2];
     private BooleanProperty finish = new SimpleBooleanProperty(); //If person won't or can't take more cards
     private BooleanProperty turn   = new SimpleBooleanProperty(); 
     
