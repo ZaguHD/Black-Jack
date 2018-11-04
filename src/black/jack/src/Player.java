@@ -47,18 +47,34 @@ public class Player extends Person{
     }
     
     //set money to to my Card 
-    public void setMoneyToMyCard(){
+    public void setMoneyToMyCard(){ 
         
     }
     
     //Split possible
-    public void isSplitPossible(){
+    public boolean isSplitPossible(){
+        boolean isSplitPossible = false;
+        if(card[0].getCards().size() == 2) {
+            
+            card[0].getCards().get(0);
+            
+            if(card[0].getCards().get(0).equals(card[0].getCards().get(1))) {
+                return true;
+            }
+           
         
+        return isSplitPossible; 
+        }
+        else{
+          return false;  
+        }
     }
     
     //Double possible
-    public void isDoublePossible() {
+    public boolean isDoublePossible(){
+        boolean isDoublePossible = false;
         
+        return isDoublePossible;
     }
       
 }
