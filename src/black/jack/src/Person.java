@@ -5,6 +5,9 @@
  */
 package black.jack.src;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 /**
  *
  * @author emazi
@@ -14,8 +17,8 @@ public abstract class Person {
     /*Variable*/
     private int id;
     private MyCard card[] = new MyCard[2];
-    private boolean finish; //If person won't or can't take more cards
-    private boolean turn; 
+    private BooleanProperty finish = new SimpleBooleanProperty(); //If person won't or can't take more cards
+    private BooleanProperty turn   = new SimpleBooleanProperty(); 
     
     /*Constructor*/
 
@@ -39,21 +42,23 @@ public abstract class Person {
         this.card = card;
     }
 
-    public boolean isFinish() {
+    public BooleanProperty getFinish() {
         return finish;
     }
 
     public void setFinish(boolean finish) {
-        this.finish = finish;
+        this.finish.set(finish);
     }
 
-    public boolean isTurn() {
+    public BooleanProperty getTurn() {
         return turn;
     }
 
     public void setTurn(boolean turn) {
-        this.turn = turn;
-    }  
+        this.turn.set(turn);
+    }
+
+ 
 
     
     /*Methods*/

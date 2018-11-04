@@ -6,3 +6,15 @@
 -fx-background-color: black;
 }
 
+#menuBar{
+    -fx-fill: #4d9762;
+}
+
+.btn{
+    -fx-background-color: #29d8ca;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-border-color: #065154;
+    -fx-border-width: 2;
+    -fx-border-radius: 3;
+}

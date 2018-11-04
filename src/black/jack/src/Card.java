@@ -60,7 +60,6 @@ public class Card {
     @Override
     public boolean equals(Object obj){
         Card card= (Card) obj;
-       
         return name.equals(card.getName());
     }
     

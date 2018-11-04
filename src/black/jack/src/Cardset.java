@@ -49,5 +49,8 @@ public class Cardset {
     }
     
     public void getRandom(){    
+        
+        
+        
     }
 }
