@@ -51,7 +51,7 @@ public class Player extends Person{
         
     }
     
-    //Split possible
+    //Is Split possible?
     public boolean isSplitPossible(){
         boolean isSplitPossible = false;
         if(card[0].getCards().size() == 2) {
@@ -59,20 +59,25 @@ public class Player extends Person{
             card[0].getCards().get(0);
             
             if(card[0].getCards().get(0).equals(card[0].getCards().get(1))) {
-                return true;
-            }
-           
-        
-        return isSplitPossible; 
+                isSplitPossible = true;
+            } 
         }
         else{
           return false;  
         }
+        
+        return isSplitPossible;
     }
     
-    //Double possible
+    //Is Double possible?
     public boolean isDoublePossible(){
         boolean isDoublePossible = false;
+        if(card[0].getCards().get(0).equals(card[1].getCards().get(1))){
+            isDoublePossible = true;
+        }
+        else{
+            isDoublePossible = false;
+        }
         
         return isDoublePossible;
     }
