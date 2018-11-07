@@ -72,7 +72,7 @@ public class Player extends Person{
     //Is Double possible?
     public boolean isDoublePossible(){
         boolean isDoublePossible = false;
-        if(card[0].getCards().get(0).equals(card[1].getCards().get(1))){
+        if(card[0].getCards().size() == 2){
             isDoublePossible = true;
         }
         else{
