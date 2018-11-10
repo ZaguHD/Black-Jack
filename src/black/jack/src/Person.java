@@ -16,12 +16,15 @@ public abstract class Person {
     
     /*Variable*/
     private int id;
-    protected MyCard card[] = new MyCard[2];
+    protected MyCard[] card = new MyCard[2];
     private BooleanProperty finish = new SimpleBooleanProperty(); //If person won't or can't take more cards
     private BooleanProperty turn   = new SimpleBooleanProperty(); 
     
     /*Constructor*/
-
+    public Person(){
+        card[0] = new MyCard();
+        card[1] = new MyCard();
+    }
     
     
     /*Getter & Setter*/
@@ -38,7 +41,7 @@ public abstract class Person {
         return card;
     }
 
-    public void setCard(MyCard[] card) {
+    public synchronized void setCard(MyCard[] card) {
         this.card = card;
     }
 
@@ -50,11 +53,11 @@ public abstract class Person {
         this.finish.set(finish);
     }
 
-    public BooleanProperty getTurn() {
+    public synchronized BooleanProperty getTurn() {
         return turn;
     }
 
-    public void setTurn(boolean turn) {
+    public synchronized void setTurn(boolean turn) {
         this.turn.set(turn);
     }
 
@@ -66,8 +69,8 @@ public abstract class Person {
         
     }
     
-    public void takeACard(){
-        
+    public boolean takeACard(Card[] card){
+        return true;
     }
 
     

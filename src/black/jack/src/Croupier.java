@@ -26,8 +26,8 @@ public class Croupier extends Person{
     
     /*Methods*/ 
     @Override
-    public void takeACard(){
-        
+    public boolean takeACard(Card[] card){
+        return true;
     }
  
 }

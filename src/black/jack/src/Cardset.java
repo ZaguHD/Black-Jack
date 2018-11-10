@@ -8,6 +8,7 @@ package black.jack.src;
 import black.jack.src.enumSrc.Rank;
 import black.jack.src.enumSrc.Suit;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -48,9 +49,20 @@ public class Cardset {
         }
     }
     
-    public void getRandom(){    
-        
-        
-        
+    public synchronized Card[] getRandom(int numberOfCards){
+        int random = (int) (Math.random() * cardset.size());
+        Card[] cards = new Card[2];
+        if(numberOfCards == 1){
+            cards[0]=cardset.get(random);
+            cardset.remove(random);
+            return cards;
+        }else{
+            cards[0]=cardset.get(random);
+            cardset.remove(random);
+            cards[1]=cardset.get(random);
+            random = (int) (Math.random() * cardset.size());
+            cardset.remove(random);
+            return cards;
+        }
     }
 }

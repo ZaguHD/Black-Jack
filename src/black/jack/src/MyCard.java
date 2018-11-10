@@ -36,7 +36,16 @@ public class MyCard {
     public void setCards(ArrayList<Card> cards) {
         this.cards = cards;
     }
-    
+    public synchronized boolean setCard(Card card){
+        points += card.getPoints();
+        cards.add(card);
+        System.out.println("Card taked: "+card.getName() + " Points actually "+points );
+        if(points>21){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public ArrayList<Card> getCards() {
         return cards;
     }

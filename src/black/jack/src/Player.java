@@ -5,6 +5,8 @@
  */
 package black.jack.src;
 
+import java.util.Arrays;
+
 /**
  *
  * @author emazi
@@ -19,11 +21,11 @@ public class Player extends Person{
     
     
     /*Getter & Setter*/
-    public int getMoney() {
+    public synchronized int getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public synchronized void setMoney(int money) {
         this.money = money;
     }
 
@@ -31,31 +33,39 @@ public class Player extends Person{
     /*Methods*/
     
     //Split
-    public void doSplit(){
+    public synchronized void doSplit(){
      
     }
     
     //Double
-    public void doDouble(){
+    public synchronized void doDouble(){
         
     }
     
     //take a Card
     @Override
-    public void takeACard(){
-        
+    public synchronized boolean takeACard(Card[] card){
+//        if(isSplitPossible()){
+//            
+//        }else{
+            return  getCard()[0].setCard(card[0]);
+//        }
+//        return false;
     }
     
     //set money to to my Card 
-    public void setMoneyToMyCard(){ 
+    public synchronized void setMoneyToMyCard(){ 
+        
+    }
+    //set money to to my Card 
+    public synchronized void doPass(){ 
         
     }
     
     //Is Split possible?
-    public boolean isSplitPossible(){
+    public synchronized boolean isSplitPossible(){
         boolean isSplitPossible = false;
         if(card[0].getCards().size() == 2) {
-            
             card[0].getCards().get(0);
             
             if(card[0].getCards().get(0).equals(card[0].getCards().get(1))) {
@@ -70,7 +80,7 @@ public class Player extends Person{
     }
     
     //Is Double possible?
-    public boolean isDoublePossible(){
+    public synchronized boolean isDoublePossible(){
         boolean isDoublePossible = false;
         if(card[0].getCards().size() == 2){
             isDoublePossible = true;

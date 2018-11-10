@@ -32,7 +32,6 @@ public class Card {
     }
     
     
-
     
     
     /*Getter & Setter*/
