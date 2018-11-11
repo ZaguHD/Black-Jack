@@ -6,6 +6,9 @@
 package black.jack.src;
 
 import java.util.Arrays;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  *
@@ -14,19 +17,21 @@ import java.util.Arrays;
 public class Player extends Person{
     
     /*Variable*/
-    private int money;
+    private IntegerProperty money = new SimpleIntegerProperty(1000);
     
     /*Constructor*/
-
-    
+//    public Player(){
+//        money.set(1000);
+//    }
+//    
     
     /*Getter & Setter*/
-    public synchronized int getMoney() {
+    public synchronized IntegerProperty getMoney() {
         return money;
     }
 
     public synchronized void setMoney(int money) {
-        this.money = money;
+        this.money.setValue(money);
     }
 
 
@@ -38,8 +43,16 @@ public class Player extends Person{
     }
     
     //Double
-    public synchronized void doDouble(){
-        
+    public synchronized boolean doDouble(IntegerProperty moneyInGame){
+        if(isDoublePossible() && moneyInGame.getValue()<=money.getValue()){
+           int newValue = moneyInGame.getValue();
+           //Gui Changed 
+           Platform.runLater(()->{
+                money.setValue(money.getValue()-newValue);
+           });
+           return true;
+        }
+        return false;
     }
     
     //take a Card
@@ -83,15 +96,6 @@ public class Player extends Person{
     
     //Is Double possible?
     public synchronized boolean isDoublePossible(){
-        boolean isDoublePossible = false;
-        if(card[0].getCards().size() == 2){
-            isDoublePossible = true;
-        }
-        else{
-            isDoublePossible = false;
-        }
-        
-        return isDoublePossible;
+        return card[0].getCards().size() == 2;
     }
-      
 }

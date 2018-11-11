@@ -10,10 +10,14 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -27,30 +31,43 @@ public class GameCr implements Initializable {
        
     /*Variable*/   
     private BlackJack manager;
-    Game game;
+    Game game = new Game();
+    Cardset cardset;
+    private int oldValue;
+    private int newValue;
     
     @FXML
     ImageView background;
     
     @FXML 
-    Button btnSplit,btnDouble,btnSetMoney,btnTakeACard,btnPass;
+    Button btnSplit,btnDouble,btnTakeACard,btnPass;
+    
+    @FXML
+    Button btn500,btn100,btn25,btn5,btn1;
+    
+    @FXML
+    Label labelBankBalance;
     
     @FXML
     ArrayList<Button> btnArray = new ArrayList<>();
-
-
-
+    
     
     /*Methods*/
     public void startAGame() {
+        int money = game.getPlayer().getMoney().getValue();
         game = new Game();
+        if(btnArray.isEmpty()){
+            btnArray.add(btnSplit);
+            btnArray.add(btnDouble);
+            btnArray.add(btnTakeACard);
+            btnArray.add(btnPass);
+            cardset = new Cardset();
+        }
         game.setDaemon(true);
+        game.setCardset(cardset);
         game.start();
-        btnArray.add(btnSplit);
-        btnArray.add(btnDouble);
-        btnArray.add(btnSetMoney);
-        btnArray.add(btnTakeACard);
-        btnArray.add(btnPass);
+        setListener();
+        game.getPlayer().setMoney(money);
     }
  
     
@@ -61,7 +78,17 @@ public class GameCr implements Initializable {
     
     @FXML
     private void setMoney(ActionEvent event){
-        game.setMove(((Button)event.getTarget()).getId());
+        if(!game.isAlive())
+            startAGame();
+            String money = ((Button)event.getTarget()).getId().substring(3);
+            oldValue = game.getPlayer().getMoney().getValue();
+            newValue = oldValue - Integer.parseInt(money);
+            if(newValue >= 0){
+                game.getPlayer().setMoney(newValue);
+                game.setMoneyInGame(Integer.parseInt(money));
+            }else{
+                System.out.println("not enough money!");
+            }
     }
     
     @FXML
@@ -85,6 +112,7 @@ public class GameCr implements Initializable {
           btnArray.forEach((btn) -> {
             btn.visibleProperty().bindBidirectional(game.getPlayer().getTurn());
           });
+          labelBankBalance.textProperty().bind(game.getPlayer().getMoney().asString());
     }
 
     
@@ -92,6 +120,7 @@ public class GameCr implements Initializable {
         Image image = new Image("/black/jack/gui/blackjacktable.png");
         background.setImage(image);
     }
+    
     
     
     

@@ -7,6 +7,9 @@ package black.jack.src;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 
 /**
@@ -20,7 +23,7 @@ public class Game extends Thread{
     private Cardset cardset;
     private boolean endGame;
     private String move ="";
-    private int indexOfTurn = 0;
+    private IntegerProperty moneyInGame = new SimpleIntegerProperty(0);
     //private int numberOfPlayer = player.size();
  
     
@@ -75,9 +78,17 @@ public class Game extends Thread{
         this.croupier = croupier;
     }
 
+    public synchronized IntegerProperty getMoneyInGame() {
+        return moneyInGame;
+    }
+
+    public synchronized void setMoneyInGame(int moneyInGame) {
+        this.moneyInGame.set(this.moneyInGame.getValue()+moneyInGame);
+        System.out.println("Money in Game: "+this.moneyInGame.getValue());
+    }
+    
     
     private synchronized void prepareGame(){
-       cardset = new Cardset();
        player.setTurn(true);
        for(int index = 0; index < 2; index ++){
             croupier.takeACard(cardset.getRandom(1));
@@ -98,6 +109,7 @@ public class Game extends Thread{
             }
      
         }
+        player.setTurn(false);
         if(player.getCard()[0].getPoints()>21){
             System.out.println("player lost");
         }else{
@@ -115,23 +127,20 @@ public class Game extends Thread{
     
     private synchronized boolean makeaMove(){
         if(getMove().equals("btnPass")){
-            player.setTurn(false);
             setMove("");
             System.out.println("Pass");
             return true;
         }else if(!getMove().equals("")){
             switch(getMove()){
                 case "btnSplit":
-                    player.doDouble();
+                    player.doSplit();
                     System.out.println("SPLIT");
                     break;
                 case "btnDouble":
-                    player.doDouble();
+                    if(player.doDouble(getMoneyInGame())){
+                        setMoneyInGame(getMoneyInGame().getValue());
+                    }
                     System.out.println("Double");
-                    break;
-                case "btnSetMoney":
-                    player.setMoney(200);
-                    System.out.println("Set Money");
                     break;
                 case "btnTakeACard":
                     setMove("");
