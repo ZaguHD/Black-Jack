@@ -17,7 +17,10 @@
       <Button fx:id="btnSplit" layoutX="470.0" layoutY="593.0" mnemonicParsing="false" onAction="#doSplit" prefHeight="25.0" prefWidth="86.0" styleClass="btn" text="Split" />
       <Button fx:id="btnDouble" layoutX="470.0" layoutY="630.0" mnemonicParsing="false" onAction="#doDouble" prefHeight="25.0" prefWidth="86.0" styleClass="btn" text="Double" />
       <Button fx:id="btnSetMoney" layoutX="470.0" layoutY="667.0" mnemonicParsing="false" onAction="#setMoney" prefHeight="25.0" prefWidth="86.0" styleClass="btn" text="set Money" />
-      <Button fx:id="btnTakeACard" layoutX="568.0" layoutY="630.0" mnemonicParsing="false" onAction="#takeACard" prefHeight="25.0" prefWidth="86.0" styleClass="btn" text="Take a Card" />
-      <Button fx:id="btnPass" layoutX="669.0" layoutY="630.0" mnemonicParsing="false" onAction="#doPass" prefHeight="25.0" prefWidth="86.0" styleClass="btn" text="Pass" />
+      <Button fx:id="btnTakeACard" layoutX="568.0" layoutY="593.0" mnemonicParsing="false" onAction="#takeACard" prefHeight="25.0" prefWidth="86.0" styleClass="btn" text="Take a Card" />
+      <Button fx:id="btnPass" layoutX="665.0" layoutY="593.0" mnemonicParsing="false" onAction="#doPass" prefHeight="25.0" prefWidth="86.0" styleClass="btn" text="Pass" />
+      <Button fx:id="btn100" layoutX="568.0" layoutY="669.0" mnemonicParsing="false" prefHeight="13.0" prefWidth="46.0" text="100" />
+      <Button fx:id="btn50" layoutX="624.0" layoutY="669.0" mnemonicParsing="false" prefHeight="13.0" prefWidth="46.0" text="50" />
+      <Button fx:id="btn25" layoutX="685.0" layoutY="669.0" mnemonicParsing="false" prefHeight="13.0" prefWidth="46.0" text="25" />
    </children>
 </AnchorPane>

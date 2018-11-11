@@ -48,6 +48,7 @@ public class Player extends Person{
 //        if(isSplitPossible()){
 //            
 //        }else{
+            System.out.println("player:");
             return  getCard()[0].setCard(card[0]);
 //        }
 //        return false;
@@ -65,6 +66,7 @@ public class Player extends Person{
     //Is Split possible?
     public synchronized boolean isSplitPossible(){
         boolean isSplitPossible = false;
+        
         if(card[0].getCards().size() == 2) {
             card[0].getCards().get(0);
             

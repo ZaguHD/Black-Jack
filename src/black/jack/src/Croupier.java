@@ -27,7 +27,13 @@ public class Croupier extends Person{
     /*Methods*/ 
     @Override
     public boolean takeACard(Card[] card){
-        return true;
+        if(getCard()[0].getPoints() <= 17){
+            return getCard()[0].setCard(card[0]);
+        }else{
+             System.out.println("Croupier has more than 17: End of Game");
+             return true;
+        }
+       
     }
  
 }

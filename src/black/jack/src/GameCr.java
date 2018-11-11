@@ -44,6 +44,7 @@ public class GameCr implements Initializable {
     /*Methods*/
     public void startAGame() {
         game = new Game();
+        game.setDaemon(true);
         game.start();
         btnArray.add(btnSplit);
         btnArray.add(btnDouble);
@@ -82,7 +83,7 @@ public class GameCr implements Initializable {
     //Listener Methods to disable and able Buttons
     public void setListener(){
           btnArray.forEach((btn) -> {
-            btn.visibleProperty().bindBidirectional(game.getPlayer().get(0).getTurn());
+            btn.visibleProperty().bindBidirectional(game.getPlayer().getTurn());
           });
     }
 

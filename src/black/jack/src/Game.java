@@ -15,19 +15,19 @@ import java.util.Arrays;
  */
 public class Game extends Thread{
     
-    private ArrayList<Player> player = new ArrayList<>();
+    private Player player = new Player();
     private Croupier croupier = new Croupier();
     private Cardset cardset;
     private boolean endGame;
     private String move ="";
     private int indexOfTurn = 0;
-    private int numberOfPlayer = player.size();
+    //private int numberOfPlayer = player.size();
  
     
     /*Constructor*/
 
     public Game() {
-        player.add(new Player());
+
     }
     
     
@@ -59,11 +59,11 @@ public class Game extends Thread{
         this.move = move;
     }
 
-    public synchronized ArrayList<Player> getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public void setPlayer(ArrayList<Player> player) {
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
@@ -78,27 +78,19 @@ public class Game extends Thread{
     
     private synchronized void prepareGame(){
        cardset = new Cardset();
-       indexOfTurn = 0;
-       numberOfPlayer = player.size();
-       player.get(indexOfTurn).setTurn(true);
+       player.setTurn(true);
+       for(int index = 0; index < 2; index ++){
+            croupier.takeACard(cardset.getRandom(1));
+            player.takeACard(cardset.getRandom(1));
+       }
     }
     
   
     @Override
     public void run(){
-        prepareGame();
-        
+        prepareGame();      
         while(!endGame){
-            if(!makeaMove()){
-            }else if(indexOfTurn == numberOfPlayer){
-                croupier.takeACard(cardset.getRandom(1));
-                indexOfTurn = 0;
-                System.out.println("Croupier Turn");
-                player.get(indexOfTurn).setTurn(true);
-            }else{
-                indexOfTurn++;
-                player.get(indexOfTurn).setTurn(true);
-            }
+            endGame = makeaMove();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
@@ -106,34 +98,44 @@ public class Game extends Thread{
             }
      
         }
-        System.out.println("fertig: User has more than 21 points");
+        if(player.getCard()[0].getPoints()>21){
+            System.out.println("player lost");
+        }else{
+            while(!croupier.takeACard(cardset.getRandom(1))){
+                System.out.println("Croupier is taking a card");
+            }
+            if(player.getCard()[0].getPoints() > croupier.getCard()[0].getPoints() || croupier.getCard()[0].getPoints() >21){
+                System.out.println("player won");
+            }else{
+                System.out.println("player lost");
+            }
+        }
+        System.out.println("Player points: "+player.getCard()[0].getPoints()+ " Croupier points: "+croupier.getCard()[0].getPoints());
     }
     
     private synchronized boolean makeaMove(){
         if(getMove().equals("btnPass")){
-            player.get(indexOfTurn).setTurn(false);
+            player.setTurn(false);
             setMove("");
             System.out.println("Pass");
-            indexOfTurn++;
             return true;
         }else if(!getMove().equals("")){
             switch(getMove()){
                 case "btnSplit":
-                    player.get(0).doDouble();
+                    player.doDouble();
                     System.out.println("SPLIT");
                     break;
                 case "btnDouble":
-                    player.get(0).doDouble();
+                    player.doDouble();
                     System.out.println("Double");
                     break;
                 case "btnSetMoney":
-                    player.get(0).setMoney(200);
+                    player.setMoney(200);
                     System.out.println("Set Money");
                     break;
                 case "btnTakeACard":
-                    System.out.println("hello");
-                    endGame = getPlayer().get(0).takeACard(cardset.getRandom(1));
-                    break;
+                    setMove("");
+                    return getPlayer().takeACard(cardset.getRandom(1));
                 default: System.out.println("Error: Wrong Button");
                     break;
             }
@@ -141,6 +143,5 @@ public class Game extends Thread{
             return false;
         }
         return false;
-    }
-    
+    } 
 }
