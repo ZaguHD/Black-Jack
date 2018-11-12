@@ -78,13 +78,13 @@ public class GameCr implements Initializable {
     
     @FXML
     private void setMoney(ActionEvent event){
-        if(!game.isAlive())
-            startAGame();
-            String money = ((Button)event.getTarget()).getId().substring(3);
-            oldValue = game.getPlayer().getMoney().getValue();
+        if(!game.isAlive()) //When game isn't started 
+            startAGame(); //start a game
+            String money = ((Button)event.getTarget()).getId().substring(3); //Numbers from Button id (Example: btn500 -> 500)
+            oldValue = game.getPlayer().getMoney().getValue(); 
             newValue = oldValue - Integer.parseInt(money);
-            if(newValue >= 0){
-                game.getPlayer().setMoney(newValue);
+            if(newValue >= 0){ //If user has more than or equals 0 
+                game.getPlayer().setMoney(newValue); 
                 game.setMoneyInGame(Integer.parseInt(money));
             }else{
                 System.out.println("not enough money!");

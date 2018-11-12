@@ -33,7 +33,12 @@ public class Player extends Person{
     public synchronized void setMoney(int money) {
         this.money.setValue(money);
     }
-
+    
+    public synchronized void setWinMoney(int money) {
+        Platform.runLater(()->{
+            this.money.setValue(money);
+        });
+    }
 
     /*Methods*/
     

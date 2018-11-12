@@ -23,7 +23,7 @@ public class Game extends Thread{
     private Cardset cardset;
     private boolean endGame;
     private String move ="";
-    private IntegerProperty moneyInGame = new SimpleIntegerProperty(0);
+    private IntegerProperty moneyInGame = new SimpleIntegerProperty(0); 
     //private int numberOfPlayer = player.size();
  
     
@@ -87,7 +87,7 @@ public class Game extends Thread{
         System.out.println("Money in Game: "+this.moneyInGame.getValue());
     }
     
-    
+    //User become on start 2 Cards and Croupier 1 
     private synchronized void prepareGame(){
        player.setTurn(true);
        for(int index = 0; index < 2; index ++){
@@ -100,16 +100,16 @@ public class Game extends Thread{
     @Override
     public void run(){
         prepareGame();      
-        while(!endGame){
-            endGame = makeaMove();
+        while(!endGame){ // so long as User can use Buttons(Double,Split etc.)
+            endGame = makeaMove(); //User input (Split,Pass etc.)
             try {
-                Thread.sleep(100);
+                Thread.sleep(100); //Thread's sleeping
             } catch (InterruptedException ex) {
                 System.out.println("Error: Thread Sleeping");
             }
      
         }
-        player.setTurn(false);
+        player.setTurn(false); //User can't klick Buttons(Split etc.)
         if(player.getCard()[0].getPoints()>21){
             System.out.println("player lost");
         }else{
@@ -118,18 +118,20 @@ public class Game extends Thread{
             }
             if(player.getCard()[0].getPoints() > croupier.getCard()[0].getPoints() || croupier.getCard()[0].getPoints() >21){
                 System.out.println("player won");
+                    //User bekommt Geld
+                    player.setWinMoney(player.getMoney().getValue()+(getMoneyInGame().getValue()*2)); 
             }else{
                 System.out.println("player lost");
             }
         }
-        System.out.println("Player points: "+player.getCard()[0].getPoints()+ " Croupier points: "+croupier.getCard()[0].getPoints());
+        System.out.println("Player points: "+player.getCard()[0].getPoints()+ " Croupier points: "+croupier.getCard()[0].getPoints());       
     }
-    
+    //User klicked a Button 
     private synchronized boolean makeaMove(){
-        if(getMove().equals("btnPass")){
-            setMove("");
-            System.out.println("Pass");
-            return true;
+        if(getMove().equals("btnPass")){ // User klicked Pass
+            setMove("");                 // String to ""
+            System.out.println("Pass");  // Sout
+            return true;                 // return true -> The Croupier will now ... 
         }else if(!getMove().equals("")){
             switch(getMove()){
                 case "btnSplit":
@@ -138,8 +140,7 @@ public class Game extends Thread{
                     break;
                 case "btnDouble":
                     if(player.doDouble(getMoneyInGame())){
-                        setMoneyInGame(getMoneyInGame().getValue());
-                    }
+                        setMoneyInGame(getMoneyInGame().getValue());}
                     System.out.println("Double");
                     break;
                 case "btnTakeACard":
