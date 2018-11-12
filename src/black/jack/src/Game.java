@@ -131,11 +131,16 @@ public class Game extends Thread{
         if(getMove().equals("btnPass")){ // User klicked Pass
             setMove("");                 // String to ""
             System.out.println("Pass");  // Sout
+            if(getPlayer().isSplitted() && !getPlayer().getCard()[1].isStand()){
+               getPlayer().getCard()[0].setStand(false);
+               getPlayer().getCard()[1].setStand(true);
+               return false;
+            }
             return true;                 // return true -> The Croupier will now ... 
         }else if(!getMove().equals("")){
             switch(getMove()){
                 case "btnSplit":
-                    player.doSplit();
+                    player.doSplit(getMoneyInGame());
                     System.out.println("SPLIT");
                     break;
                 case "btnDouble":

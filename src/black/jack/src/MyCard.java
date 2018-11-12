@@ -17,7 +17,7 @@ public class MyCard {
     private int money;
     private ArrayList<Card> cards = new ArrayList<>();
     private int points;
-
+    private boolean stand = false;
     
     /*Constructor*/
     
@@ -58,7 +58,16 @@ public class MyCard {
         this.points = points;
     }
     
+    
     /*Methods*/
+
+    public synchronized boolean isStand() {
+        return stand;
+    }
+
+    public synchronized void setStand(boolean stand) {
+        this.stand = stand;
+    }
 
 
 

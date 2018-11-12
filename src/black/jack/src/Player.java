@@ -18,6 +18,7 @@ public class Player extends Person{
     
     /*Variable*/
     private IntegerProperty money = new SimpleIntegerProperty(1000);
+    private boolean splitted = false;
     
     /*Constructor*/
 //    public Player(){
@@ -33,6 +34,16 @@ public class Player extends Person{
     public synchronized void setMoney(int money) {
         this.money.setValue(money);
     }
+
+    public boolean isSplitted() {
+        return splitted;
+    }
+
+    public void setSplitted(boolean splitted) {
+        this.splitted = splitted;
+    }
+    
+    
     
     public synchronized void setWinMoney(int money) {
         Platform.runLater(()->{
@@ -43,8 +54,12 @@ public class Player extends Person{
     /*Methods*/
     
     //Split
-    public synchronized void doSplit(){
-     
+    public synchronized void doSplit(IntegerProperty moneyInGame){
+        if(isSplitPossible() && moneyInGame.getValue()<=money.getValue()){
+           getCard()[1].setCard(getCard()[0].getCards().get(1)); //split cards into two hands
+           getCard()[0].getCards().remove(1);
+           getCard()[0].setStand(true);
+        }
     }
     
     //Double
@@ -63,13 +78,17 @@ public class Player extends Person{
     //take a Card
     @Override
     public synchronized boolean takeACard(Card[] card){
-//        if(isSplitPossible()){
-//            
-//        }else{
-            System.out.println("player:");
+        System.out.println("player:");
+        if(splitted){
+            if(getCard()[0].isStand()){
+                getCard()[0].setCard(card[0]);
+                return false;
+            }{
+                return getCard()[0].setCard(card[1]);
+            }
+        }else{
             return  getCard()[0].setCard(card[0]);
-//        }
-//        return false;
+        }
     }
     
     //set money to to my Card 
@@ -83,24 +102,16 @@ public class Player extends Person{
     
     //Is Split possible?
     public synchronized boolean isSplitPossible(){
-        boolean isSplitPossible = false;
-        
-        if(card[0].getCards().size() == 2) {
-            card[0].getCards().get(0);
-            
-            if(card[0].getCards().get(0).equals(card[0].getCards().get(1))) {
-                isSplitPossible = true;
-            } 
-        }
-        else{
-          return false;  
-        }
-        
-        return isSplitPossible;
+        if(card[0].getCards().size() == 2 && (card[1].getCards().isEmpty())
+          && card[0].getCards().get(0).getPoints() == card[0].getCards().get(1).getPoints()) {
+            splitted = true;
+            return true;
+        }        
+        return false;
     }
     
     //Is Double possible?
     public synchronized boolean isDoublePossible(){
-        return card[0].getCards().size() == 2;
+        return (card[0].getCards().size() == 2 && (card[1].getCards().isEmpty()));
     }
 }
