@@ -36,6 +36,14 @@ public class Cardset {
     public void setCardset(ArrayList<Card> cardset) {    
         this.cardset = cardset;
     }
+    
+    //For Test Split
+    public synchronized Card[] getCard(){
+        Card[] cards = new Card[2];
+        cards[0]=cardset.get(1);
+        return cards;
+    } 
+    
 
     /*Methods*/
     public void makeSet() {

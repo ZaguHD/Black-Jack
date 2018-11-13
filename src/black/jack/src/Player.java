@@ -45,21 +45,27 @@ public class Player extends Person{
     
     
     
-    public synchronized void setWinMoney(int money) {
-        Platform.runLater(()->{
-            this.money.setValue(money);
-        });
+    public void setWinMoney(int money) {
+        synchronized(this){
+            Platform.runLater(()->{
+                this.money.setValue(money);
+            });            
+        }
     }
 
     /*Methods*/
     
     //Split
-    public synchronized void doSplit(IntegerProperty moneyInGame){
+    public synchronized boolean doSplit(IntegerProperty moneyInGame){
         if(isSplitPossible() && moneyInGame.getValue()<=money.getValue()){
+           doDouble(moneyInGame);
            getCard()[1].setCard(getCard()[0].getCards().get(1)); //split cards into two hands
            getCard()[0].getCards().remove(1);
            getCard()[0].setStand(true);
+           System.out.println("Splitted: now u can put into first hand");
+           return true;
         }
+        return false;
     }
     
     //Double
@@ -83,8 +89,8 @@ public class Player extends Person{
             if(getCard()[0].isStand()){
                 getCard()[0].setCard(card[0]);
                 return false;
-            }{
-                return getCard()[0].setCard(card[1]);
+            }else{
+                return getCard()[1].setCard(card[0]);
             }
         }else{
             return  getCard()[0].setCard(card[0]);

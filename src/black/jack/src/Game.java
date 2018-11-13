@@ -23,7 +23,8 @@ public class Game extends Thread{
     private Cardset cardset;
     private boolean endGame;
     private String move ="";
-    private IntegerProperty moneyInGame = new SimpleIntegerProperty(0); 
+    private IntegerProperty moneyInHand1 = new SimpleIntegerProperty(0); 
+    private IntegerProperty moneyInHand2 = new SimpleIntegerProperty(0); 
     //private int numberOfPlayer = player.size();
  
     
@@ -78,22 +79,31 @@ public class Game extends Thread{
         this.croupier = croupier;
     }
 
-    public synchronized IntegerProperty getMoneyInGame() {
-        return moneyInGame;
+    public synchronized IntegerProperty getMoneyInHand1() {
+        return moneyInHand1;
+    }
+    public synchronized IntegerProperty getMoneyInHand2() {
+        return moneyInHand1;
     }
 
-    public synchronized void setMoneyInGame(int moneyInGame) {
-        this.moneyInGame.set(this.moneyInGame.getValue()+moneyInGame);
-        System.out.println("Money in Game: "+this.moneyInGame.getValue());
+    public synchronized void setMoneyInHand1(int moneyInGame) {
+        this.moneyInHand1.set(this.moneyInHand1.getValue()+moneyInGame);
+        System.out.println("Money in Game Hand 1: "+this.moneyInHand1.getValue());
     }
+    public synchronized void setMoneyInHand2(int moneyInGame) {
+        this.moneyInHand2.set(this.moneyInHand2.getValue()+moneyInGame);
+        System.out.println("Money in Game Hand 2:"+this.moneyInHand2.getValue());
+    }   
     
     //User become on start 2 Cards and Croupier 1 
     private synchronized void prepareGame(){
        player.setTurn(true);
        for(int index = 0; index < 2; index ++){
             croupier.takeACard(cardset.getRandom(1));
-            player.takeACard(cardset.getRandom(1));
+            //player.takeACard(cardset.getRandom(1));
        }
+       player.takeACard(cardset.getCard());
+       player.takeACard(cardset.getCard());
     }
     
   
@@ -110,20 +120,29 @@ public class Game extends Thread{
      
         }
         player.setTurn(false); //User can't klick Buttons(Split etc.)
-        if(player.getCard()[0].getPoints()>21){
-            System.out.println("player lost");
-        }else{
             while(!croupier.takeACard(cardset.getRandom(1))){
                 System.out.println("Croupier is taking a card");
             }
-            if(player.getCard()[0].getPoints() > croupier.getCard()[0].getPoints() || croupier.getCard()[0].getPoints() >21){
-                System.out.println("player won");
-                    //User bekommt Geld
-                    player.setWinMoney(player.getMoney().getValue()+(getMoneyInGame().getValue()*2)); 
-            }else{
-                System.out.println("player lost");
+            int money = 0;
+            for(int hand = 0; hand<2; hand++){
+                if((!(player.getCard()[hand].getPoints()>21)) && (player.getCard()[hand].getPoints() > croupier.getCard()[0].getPoints() 
+                || croupier.getCard()[0].getPoints() >21)){
+                    System.out.println("player won hand: "+hand);
+                        //User bekommt Geld
+                        if(hand ==0){
+                            money = money + (getMoneyInHand1().getValue()*2);
+                            //player.setWinMoney(player.getMoney().getValue()+(getMoneyInHand1().getValue()*2));
+                            //System.out.println("money: "+player.getMoney());
+                        }else{
+                            money = (money + getMoneyInHand2().getValue()*2);
+                            //player.setWinMoney(player.getMoney().getValue()+(getMoneyInHand2().getValue()*2));
+                            //System.out.println("money: "+player.getMoney());
+                        }
+                }else{
+                    System.out.println("player lost");
+                }                
             }
-        }
+        player.setWinMoney(player.getMoney().getValue()+(money));
         System.out.println("Player points: "+player.getCard()[0].getPoints()+ " Croupier points: "+croupier.getCard()[0].getPoints());       
     }
     //User klicked a Button 
@@ -140,13 +159,16 @@ public class Game extends Thread{
         }else if(!getMove().equals("")){
             switch(getMove()){
                 case "btnSplit":
-                    player.doSplit(getMoneyInGame());
-                    System.out.println("SPLIT");
+                    if(player.doSplit(getMoneyInHand1())){
+                        setMoneyInHand2(getMoneyInHand1().getValue());   
+                        System.out.println("SPLIT");
+                    }
                     break;
                 case "btnDouble":
-                    if(player.doDouble(getMoneyInGame())){
-                        setMoneyInGame(getMoneyInGame().getValue());}
-                    System.out.println("Double");
+                    if(player.doDouble(getMoneyInHand1())){
+                        setMoneyInHand1(getMoneyInHand1().getValue());
+                        System.out.println("Double");
+                    }
                     break;
                 case "btnTakeACard":
                     setMove("");

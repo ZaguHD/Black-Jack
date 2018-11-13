@@ -85,7 +85,7 @@ public class GameCr implements Initializable {
             newValue = oldValue - Integer.parseInt(money);
             if(newValue >= 0){ //If user has more than or equals 0 
                 game.getPlayer().setMoney(newValue); 
-                game.setMoneyInGame(Integer.parseInt(money));
+                game.setMoneyInHand1(Integer.parseInt(money));
             }else{
                 System.out.println("not enough money!");
             }
