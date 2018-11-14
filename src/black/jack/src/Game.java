@@ -123,26 +123,7 @@ public class Game extends Thread{
             while(!croupier.takeACard(cardset.getRandom(1))){
                 System.out.println("Croupier is taking a card");
             }
-            int money = 0;
-            for(int hand = 0; hand<2; hand++){
-                if((!(player.getCard()[hand].getPoints()>21)) && (player.getCard()[hand].getPoints() > croupier.getCard()[0].getPoints() 
-                || croupier.getCard()[0].getPoints() >21)){
-                    System.out.println("player won hand: "+hand);
-                        //User bekommt Geld
-                        if(hand ==0){
-                            money = money + (getMoneyInHand1().getValue()*2);
-                            //player.setWinMoney(player.getMoney().getValue()+(getMoneyInHand1().getValue()*2));
-                            //System.out.println("money: "+player.getMoney());
-                        }else{
-                            money = (money + getMoneyInHand2().getValue()*2);
-                            //player.setWinMoney(player.getMoney().getValue()+(getMoneyInHand2().getValue()*2));
-                            //System.out.println("money: "+player.getMoney());
-                        }
-                }else{
-                    System.out.println("player lost");
-                }                
-            }
-        player.setWinMoney(player.getMoney().getValue()+(money));
+        findWinner();
         System.out.println("Player points: "+player.getCard()[0].getPoints()+ " Croupier points: "+croupier.getCard()[0].getPoints());       
     }
     //User klicked a Button 
@@ -181,4 +162,26 @@ public class Game extends Thread{
         }
         return false;
     } 
+    private synchronized void findWinner(){
+        int money = 0;
+        for(int hand = 0; hand<2; hand++){
+            if((!(player.getCard()[hand].getPoints()>21)) && (player.getCard()[hand].getPoints() > croupier.getCard()[0].getPoints() 
+            || croupier.getCard()[0].getPoints() >21)){
+                System.out.println("player won hand: "+hand);
+                    //User bekommt Geld
+                    if(hand ==0){
+                        money = money + (getMoneyInHand1().getValue()*2);
+                    }else{
+                        money = (money + getMoneyInHand2().getValue()*2);
+                    }
+            }else if(player.getCard()[hand].getPoints()==croupier.getCard()[0].getPoints()
+                   &&!(croupier.getCard()[0].getCards().size()==2 && croupier.getCard()[0].getPoints()==21)){
+                System.out.println("draw");
+                money = money + getMoneyInHand1().getValue();
+            }else{
+                System.out.println("player lost");
+            }                
+        }
+        player.setWinMoney(player.getMoney().getValue()+(money));
+    }
 }

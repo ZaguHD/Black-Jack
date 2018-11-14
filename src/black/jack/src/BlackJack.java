@@ -6,6 +6,7 @@
 package black.jack.src;
 
 import java.io.IOException;
+import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -45,6 +46,7 @@ public class BlackJack extends Application {
         this.gameStage.show();   
       //  gameCr.startAGame();
         //gameCr.setListener();
+        
         gameCr.setBackground();
         
     }
