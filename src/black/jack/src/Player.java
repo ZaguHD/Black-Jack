@@ -35,11 +35,11 @@ public class Player extends Person{
         this.money.setValue(money);
     }
 
-    public boolean isSplitted() {
+    public synchronized boolean isSplitted() {
         return splitted;
     }
 
-    public void setSplitted(boolean splitted) {
+    public synchronized void setSplitted(boolean splitted) {
         this.splitted = splitted;
     }
     

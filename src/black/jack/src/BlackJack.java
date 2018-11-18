@@ -43,6 +43,10 @@ public class BlackJack extends Application {
         this.gameStage.setTitle("BlackJack");
         this.gameStage.setScene(sceneGameCr);
         this.gameStage.setResizable(false); // Benutzer kann die Grösse des Fensters nicht ändern
+        /*Need to be change */
+        gameCr.resultPane.setDisable(true);
+        gameCr.resultPane.setOpacity(0);
+        /* */
         this.gameStage.show();   
       //  gameCr.startAGame();
         //gameCr.setListener();

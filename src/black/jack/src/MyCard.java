@@ -6,6 +6,7 @@
 package black.jack.src;
 
 import java.util.ArrayList;
+import javafx.application.Platform;
 
 /**
  *
@@ -46,7 +47,7 @@ public class MyCard {
             return false;
         }
     }
-    public ArrayList<Card> getCards() {
+    public synchronized ArrayList<Card>  getCards() {
         return cards;
     }
     

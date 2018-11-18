@@ -7,6 +7,7 @@ package black.jack.src;
 
 import black.jack.src.enumSrc.Rank;
 import black.jack.src.enumSrc.Suit;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -14,13 +15,14 @@ import black.jack.src.enumSrc.Suit;
  */
 
 
-public class Card {
+public  class Card {
     
     /*Variable*/
     private Suit suit;
     private Rank rank;
     private String name;
     private int points;
+    private Image image;
     
     /*Constructor*/
 
@@ -29,10 +31,12 @@ public class Card {
         this.rank = rank;
         name = suit.name() + "-" +rank.name();
         setPoint(rank);
+        System.out.println(rank.name().toLowerCase()+" "+suit.name().toLowerCase());
+        //System.out.println("this "+card.+": "+getClass().getResource("/black/jack/gui/card_Pictures/"+rank.name().toLowerCase()+""+suit.name().toLowerCase()+".png").toString());
+        image = new Image(getClass().getResource("/black/jack/gui/card_Pictures/"+rank.name().toLowerCase()+""+suit.name().toLowerCase()+".png").toString());
+////////
     }
-    
-    
-    
+   
     
     /*Getter & Setter*/
     
@@ -52,6 +56,14 @@ public class Card {
     public void setPoints(int points) {
         this.points = points;
     }    
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
     
     /*Methods*/     
