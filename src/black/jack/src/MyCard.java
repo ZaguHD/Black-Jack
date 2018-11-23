@@ -41,7 +41,7 @@ public class MyCard {
         points += card.getPoints(); //points added 
         cards.add(card); //Card added
         System.out.println("Card taked: "+card.getName() + " Points actually "+points );
-        if(points>21){ //Points more than 21 -> user lost
+        if(points>=21){ //Points more than 21 -> user lost
             return true;
         }else{
             return false;
@@ -70,9 +70,16 @@ public class MyCard {
         this.stand = stand;
     }
 
-
-
-
-
+    public synchronized int getHand() {
+        if(stand){
+            return 1;
+        }
+        return 0;
+    }
+    
+    public synchronized void getLastCardImage(){
+        
+        
+    }
 
 }

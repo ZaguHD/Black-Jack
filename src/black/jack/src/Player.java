@@ -9,6 +9,7 @@ import java.util.Arrays;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -60,6 +61,7 @@ public class Player extends Person{
         if(isSplitPossible() && moneyInGame.getValue()<=money.getValue()){
            doDouble(moneyInGame);
            getCard()[1].setCard(getCard()[0].getCards().get(1)); //split cards into two hands
+           getCard()[0].setPoints(getCard()[0].getPoints()%2);
            getCard()[0].getCards().remove(1);
            getCard()[0].setStand(true);
            System.out.println("Splitted: now u can put into first hand");
@@ -87,7 +89,10 @@ public class Player extends Person{
         System.out.println("player:");
         if(splitted){
             if(getCard()[0].isStand()){
-                getCard()[0].setCard(card[0]);
+                if(getCard()[0].setCard(card[0])){
+                    getCard()[0].setStand(false);
+                    getCard()[1].setStand(true);
+                }
                 return false;
             }else{
                 return getCard()[1].setCard(card[0]);
@@ -119,5 +124,8 @@ public class Player extends Person{
     //Is Double possible?
     public synchronized boolean isDoublePossible(){
         return (card[0].getCards().size() == 2 && (card[1].getCards().isEmpty()));
+    }
+    public synchronized Image getLastCardImage(int hand){
+        return getCard()[hand].getCards().get(getCard()[hand].getCards().size()-1).getImage();
     }
 }
