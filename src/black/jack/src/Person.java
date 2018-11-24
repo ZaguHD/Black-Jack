@@ -7,6 +7,7 @@ package black.jack.src;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -71,6 +72,9 @@ public abstract class Person {
     
     public boolean takeACard(Card[] card){
         return true;
+    }
+    public synchronized Image getLastCardImage(int hand){
+        return getCard()[hand].getCards().get(getCard()[hand].getCards().size()-1).getImage();
     }
 
     

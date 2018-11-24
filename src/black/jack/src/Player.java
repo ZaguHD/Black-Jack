@@ -61,7 +61,7 @@ public class Player extends Person{
         if(isSplitPossible() && moneyInGame.getValue()<=money.getValue()){
            doDouble(moneyInGame);
            getCard()[1].setCard(getCard()[0].getCards().get(1)); //split cards into two hands
-           getCard()[0].setPoints(getCard()[0].getPoints()%2);
+           getCard()[0].setPoints(getCard()[0].getPoints()/2);
            getCard()[0].getCards().remove(1);
            getCard()[0].setStand(true);
            System.out.println("Splitted: now u can put into first hand");
@@ -125,7 +125,5 @@ public class Player extends Person{
     public synchronized boolean isDoublePossible(){
         return (card[0].getCards().size() == 2 && (card[1].getCards().isEmpty()));
     }
-    public synchronized Image getLastCardImage(int hand){
-        return getCard()[hand].getCards().get(getCard()[hand].getCards().size()-1).getImage();
-    }
+
 }

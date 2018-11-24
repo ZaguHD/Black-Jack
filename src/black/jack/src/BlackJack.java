@@ -51,7 +51,7 @@ public class BlackJack extends Application {
       //  gameCr.startAGame();
         //gameCr.setListener();
         
-        gameCr.setBackground();
+//        gameCr.setBackground();
         
     }
 

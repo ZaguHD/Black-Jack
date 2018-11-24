@@ -5,8 +5,10 @@
  */
 package black.jack.src;
 
+import com.jfoenix.controls.JFXButton;
 import java.awt.Color;
 import java.net.URL;
+import java.nio.file.WatchKey;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -42,12 +44,13 @@ public class GameCr implements Initializable {
     private int oldValue;
     private int newValue;
     private int cardIndex = 0;
-    private int x = 309;
-    private int y = 390;
+    private int x = 475;
+    private int y = 318;
     private int xHand2;
     private int yHand2;
+    private int xCroupier = 345;
+    private int yCroupier = 115;
 
-    
     @FXML
     ImageView background;
     
@@ -68,6 +71,10 @@ public class GameCr implements Initializable {
     
     @FXML
     Pane resultPane;
+    
+    @FXML
+    ImageView  cardSet;
+    
 
     public synchronized int getX() {
         return x;
@@ -104,6 +111,7 @@ public class GameCr implements Initializable {
     
     
     private ArrayList<Pane> paneList = new ArrayList();
+    private ArrayList<Pane> paneListCroupier = new ArrayList();
     
 //    @FXML
 //    Pane cardNode;
@@ -133,17 +141,27 @@ public class GameCr implements Initializable {
           @Override
            public void run(){
 
-            while(game.isAlive()){
+            while(game.isAlive()||paneListCroupier.size() != (game.getCroupier().getCard()[0].getCards().size())){
                   if(paneList.size() != (game.getPlayer().getCard()[0].getCards().size() + game.getPlayer().getCard()[1].getCards().size())){
                       Platform.runLater(()->{
                         takeCard(game.getPlayer().getCard()[1].getHand());
                     }); 
+                  }else if(paneListCroupier.size() != (game.getCroupier().getCard()[0].getCards().size())){
+                      Platform.runLater(()->{
+                         takeCardCroupier();
+                      }); 
                   }
+                  //System.out.println("hello: "+game.getCroupier().getCard()[0].getCards().size());
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(GameCr.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GameCr.class.getName()).log(Level.SEVERE, null, ex);
             }
             Platform.runLater(()->{
                  resultPane.setDisable(false);
@@ -165,6 +183,7 @@ public class GameCr implements Initializable {
          }
       };
       waitThread.start();
+      
      
     }
     
@@ -174,10 +193,19 @@ public class GameCr implements Initializable {
             playPane.getChildren().remove(pane);                 
 
         });
+        paneListCroupier.forEach((pane) -> {
+            playPane.getChildren().remove(pane);                 
+
+        });
        paneList = new ArrayList<>();
+       paneListCroupier = new ArrayList<>();
+       
         cardIndex = 0;
-        setX(309);
-        setY(390);
+        System.out.println("hello");
+        setX(475);
+        setY(318);
+        xCroupier = 345;
+        yCroupier = 115;
         resultPane.setDisable(true);
         resultPane.setOpacity(0);
     }
@@ -194,7 +222,7 @@ public class GameCr implements Initializable {
         if(!game.isAlive()){ //When game isn't started 
             startAGame(); //start a game
             waitForAnserw();
-            String money = ((Button)event.getTarget()).getId().substring(3); //Numbers from Button id (Example: btn500 -> 500)
+            String money = ((Button)event.getTarget()).getText(); //Numbers from Button id (Example: btn500 -> 500)
             oldValue = game.getPlayer().getMoney().getValue(); 
             newValue = oldValue - Integer.parseInt(money);
             if(newValue >= 0){ //If user has more than or equals 0 
@@ -206,6 +234,46 @@ public class GameCr implements Initializable {
             }
         }
     }
+
+    private void takeCardCroupier(){
+        paneListCroupier.add(new Pane());        
+        ImageView frontCard = new ImageView();
+        ImageView backCard = new ImageView(); 
+        System.out.println("");
+        playPane.getChildren().add(paneListCroupier.get(paneListCroupier.size()-1));
+        paneListCroupier.get(paneListCroupier.size()-1).setLayoutX(cardSet.getLayoutX());
+        paneListCroupier.get(paneListCroupier.size()-1).setLayoutY(cardSet.getLayoutY());
+        paneListCroupier.get(paneListCroupier.size()-1).getChildren().addAll(backCard,frontCard);
+        
+        backCard.setImage(game.getCroupier().getLastCardImage(0));
+        Image image = new Image(getClass().getResource("/black/jack/gui/card_Pictures/cardBack.png").toString());
+
+        frontCard.setImage(image);
+        TranslateTransition move = new TranslateTransition(Duration.millis(400), paneListCroupier.get(paneListCroupier.size()-1));
+
+        move.setToX(xCroupier);
+        //move.setToY(yCroupier);               
+
+        xCroupier += 100;
+
+        ScaleTransition stHideFront = new ScaleTransition(Duration.millis(200), frontCard);
+        stHideFront.setFromX(1);
+        stHideFront.setToX(0);
+
+        backCard.setScaleX(0);
+
+        ScaleTransition stShowBack = new ScaleTransition(Duration.millis(200), backCard);
+        stShowBack.setFromX(0);
+        stShowBack.setToX(1);
+
+        stHideFront.setOnFinished((ActionEvent t) -> {
+            stShowBack.play();
+        });
+
+        move.play();
+        stHideFront.play();
+    }
+         
     private void takeCard(int hand){
         paneList.add(new Pane());
         ImageView frontCard = new ImageView();
@@ -213,34 +281,33 @@ public class GameCr implements Initializable {
 
         playPane.getChildren().add(paneList.get(cardIndex));
         System.out.println("size :"+ playPane.getChildren().size());
-        paneList.get(cardIndex).setLayoutX(307);
-        paneList.get(cardIndex).setLayoutY(55);
+        paneList.get(cardIndex).setLayoutX(cardSet.getLayoutX());
+        paneList.get(cardIndex).setLayoutY(cardSet.getLayoutY());
         paneList.get(cardIndex).getChildren().addAll(frontCard,backCard);
 
         backCard.setImage(game.getPlayer().getLastCardImage(hand));
         Image image = new Image(getClass().getResource("/black/jack/gui/card_Pictures/cardBack.png").toString());
 
         frontCard.setImage(image);
-        TranslateTransition move = new TranslateTransition(Duration.millis(500), paneList.get(cardIndex));
+        TranslateTransition move = new TranslateTransition(Duration.millis(250), paneList.get(cardIndex));
         if(game.getPlayer().getCard()[1].isStand() && game.getPlayer().getCard()[1].getCards().size()==2){
              setX(xHand2);
-             setY(390-10);              
+             setY(318-10);              
         }
 
         move.setToX(x);
         move.setToY(y);               
 
-
         setX(getX()+12);
         setY(getY()-10);
 
-        ScaleTransition stHideFront = new ScaleTransition(Duration.millis(250), frontCard);
+        ScaleTransition stHideFront = new ScaleTransition(Duration.millis(125), frontCard);
         stHideFront.setFromX(1);
         stHideFront.setToX(0);
 
         backCard.setScaleX(0);
 
-        ScaleTransition stShowBack = new ScaleTransition(Duration.millis(250), backCard);
+        ScaleTransition stShowBack = new ScaleTransition(Duration.millis(125), backCard);
         stShowBack.setFromX(0);
         stShowBack.setToX(1);
 
@@ -255,18 +322,19 @@ public class GameCr implements Initializable {
     }
     private void makeSplit(){
         TranslateTransition move1 = new TranslateTransition(Duration.millis(100), paneList.get(0));
-           move1.setToX(paneList.get(0).getLayoutX()-65);
+           move1.setToX(getX()+20);
            
         TranslateTransition move2= new TranslateTransition(Duration.millis(100), paneList.get(1));
-           move2.setToX(paneList.get(1).getLayoutX()+65);
+           move2.setToX(getX()-130);
            move2.setToY(getY()+20);
            
         move1.play();
         move2.play();
         move2.setOnFinished(((event) -> {  
-           y = (int) move2.getToY() - 10;
-           x = (int)  move2.getToX() + 12;
-           xHand2 = (int) move1.getToX() + 12;
+           y = 318-10;
+           x = (int)  move1.getToX() + 12;
+           xHand2 = (int) move2.getToX() + 12;
+           yHand2 = (int) move2.getToY() - 10;
 
         }));
      
@@ -302,10 +370,10 @@ public class GameCr implements Initializable {
     }
 
     
-    public void setBackground(){
-        Image image = new Image("/black/jack/gui/blackjacktable.png");
-        background.setImage(image);
-    }
+//    public void setBackground(){
+//        Image image = new Image("/black/jack/gui/blackjacktable.png");
+//        background.setImage(image);
+//    }
     
     
     
