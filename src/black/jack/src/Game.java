@@ -23,7 +23,7 @@ public class Game extends Thread{
     private Cardset cardset;
     private boolean endGame;
     private String move ="";
-    private int winner; // 0 = lost 1=player 2= draw
+    private int [] winner = new int[2]; // 0 = lost 1=player 2= draw
     private IntegerProperty moneyInHand1 = new SimpleIntegerProperty(0); 
     private IntegerProperty moneyInHand2 = new SimpleIntegerProperty(0); 
     //private int numberOfPlayer = player.size();
@@ -87,29 +87,29 @@ public class Game extends Thread{
         return moneyInHand1;
     }
 
-    public synchronized int getWinner() {
+    public synchronized int[] getWinner() {
         return winner;
     }
 
-    public synchronized void setWinner(int winner) {
+    public synchronized void setWinner(int[] winner) {
         this.winner = winner;
     }
     
 
     public synchronized void setMoneyInHand1(int moneyInGame) {
         this.moneyInHand1.set(this.moneyInHand1.getValue()+moneyInGame);
-        System.out.println("Money in Game Hand 1: "+this.moneyInHand1.getValue());
+        //System.out.println("Money in Game Hand 1: "+this.moneyInHand1.getValue());
     }
     public synchronized void setMoneyInHand2(int moneyInGame) {
         this.moneyInHand2.set(this.moneyInHand2.getValue()+moneyInGame);
-        System.out.println("Money in Game Hand 2:"+this.moneyInHand2.getValue());
+        //System.out.println("Money in Game Hand 2:"+this.moneyInHand2.getValue());
     }   
     
     //User become on start 2 Cards and Croupier 1 
     private synchronized void prepareGame(){
        player.setTurn(true);
        for(int index = 0; index < 2; index ++){
-            player.takeACard(cardset.getCard());
+            player.takeACard(cardset.getRandom(1));
        }
        croupier.takeACard(cardset.getRandom(1));
     }
@@ -128,8 +128,14 @@ public class Game extends Thread{
      
         }
         player.setTurn(false); //User can't klick Buttons(Split etc.)
+        player.setFinish(true);
             while(!croupier.takeACard(cardset.getRandom(1))){
-                System.out.println("Croupier is taking a card");
+                System.out.println("Croupier is taking a card");              
+             try {
+                Thread.sleep(750); //Thread's sleeping
+            } catch (InterruptedException ex) {
+                System.out.println("Error: Thread Sleeping");
+            }
             }
         findWinner();
         System.out.println("Player points: "+player.getCard()[0].getPoints()+ " Croupier points: "+croupier.getCard()[0].getPoints());       
@@ -177,7 +183,7 @@ public class Game extends Thread{
             if((!(player.getCard()[hand].getPoints()>21)) && (player.getCard()[hand].getPoints() > croupier.getCard()[0].getPoints() 
             || croupier.getCard()[0].getPoints() >21) && player.getCard()[hand].getPoints() != 0){
                 System.out.println("player won hand: "+hand);
-                    setWinner(1);
+                     getWinner()[hand] = 1;
                     //User bekommt Geld
                     if(hand ==0){
                         money = money + (getMoneyInHand1().getValue()*2);
@@ -187,11 +193,11 @@ public class Game extends Thread{
             }else if(player.getCard()[hand].getPoints()==croupier.getCard()[0].getPoints()
                    &&!(croupier.getCard()[0].getCards().size()==2 && croupier.getCard()[0].getPoints()==21)){
                 System.out.println("draw");
-                setWinner(2);
+                getWinner()[hand] = 2;
                 money = money + getMoneyInHand1().getValue();
             }else{
                 System.out.println("player lost");
-                setWinner(0);
+               getWinner()[hand] = 3;
                 
             }                
         }

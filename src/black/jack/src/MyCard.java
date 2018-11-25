@@ -7,6 +7,8 @@ package black.jack.src;
 
 import java.util.ArrayList;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  *
@@ -18,6 +20,7 @@ public class MyCard {
     private int money;
     private ArrayList<Card> cards = new ArrayList<>();
     private int points;
+    private IntegerProperty guiPoints = new SimpleIntegerProperty(0);
     private boolean stand = false;
     
     /*Constructor*/
@@ -39,6 +42,9 @@ public class MyCard {
     }
     public synchronized boolean setCard(Card card){
         points += card.getPoints(); //points added 
+        Platform.runLater(()->{
+            setGuiPoints(points);
+        });
         cards.add(card); //Card added
         System.out.println("Card taked: "+card.getName() + " Points actually "+points );
         if(points>=21){ //Points more than 21 -> user lost
@@ -58,6 +64,15 @@ public class MyCard {
     public void setPoints(int points) {
         this.points = points;
     }
+
+    public IntegerProperty getGuiPoints() {
+        return guiPoints;
+    }
+
+    public void setGuiPoints(int guiPoints) {
+        this.guiPoints.set(guiPoints);
+    }
+    
     
     
     /*Methods*/

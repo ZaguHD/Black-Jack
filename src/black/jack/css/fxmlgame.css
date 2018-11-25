@@ -20,10 +20,44 @@
 }
 
 #jeton{
-                -fx-background-radius: 5em;  
-                -fx-border-width: 4;
-                -fx-border-color:  white;
-                -fx-border-radius: 5em;
-                -fx-background-color:  #cd5554;
+    -fx-background-radius: 5em;  
+    -fx-border-width: 4;
+    -fx-border-color:  white;
+    -fx-border-radius: 5em;
+    -fx-background-color:  #cd5554;
 }
 
+#points{
+    -fx-background-radius: 5em;  
+    -fx-border-width: 4;
+    -fx-border-color:  #313d4b;
+    -fx-border-radius: 5em;
+    -fx-background-color:  #cd5554;
+}
+
+
+.wonLabel{
+    -fx-background-radius: 5em;  
+    -fx-border-width: 4;
+    -fx-border-color:  #313d4b;
+    -fx-border-radius: 5em;
+    -fx-background-color:  green;
+    -fx-text-fill: white;
+}
+.lostLabel{
+    -fx-background-radius: 5em;  
+    -fx-border-width: 4;
+    -fx-border-color:  #313d4b;
+    -fx-border-radius: 5em;
+    -fx-background-color: red;
+    -fx-text-fill: white;   
+}
+
+.drawLabel{
+    -fx-background-radius: 5em;  
+    -fx-border-width: 4;
+    -fx-border-color:  #313d4b;
+    -fx-border-radius: 5em;
+    -fx-background-color: blue;
+    -fx-text-fill: white;   
+}

@@ -23,6 +23,7 @@ public  class Card {
     private String name;
     private int points;
     private Image image;
+    private boolean usedInGui = false;
     
     /*Constructor*/
 
@@ -63,6 +64,14 @@ public  class Card {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public boolean isUsedInGui() {
+        return usedInGui;
+    }
+
+    public void setUsedInGui(boolean usedInGui) {
+        this.usedInGui = usedInGui;
     }
 
     

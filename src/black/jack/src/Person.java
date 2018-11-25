@@ -18,7 +18,7 @@ public abstract class Person {
     /*Variable*/
     private int id;
     protected MyCard[] card = new MyCard[2];
-    private BooleanProperty finish = new SimpleBooleanProperty(); //If person won't or can't take more cards
+    private BooleanProperty finish = new SimpleBooleanProperty(false); //If person won't or can't take more cards
     private BooleanProperty turn   = new SimpleBooleanProperty(); 
     
     /*Constructor*/
@@ -74,6 +74,19 @@ public abstract class Person {
         return true;
     }
     public synchronized Image getLastCardImage(int hand){
+        for(Card card : getCard()[0].getCards()){
+            if(!card.isUsedInGui()){
+                card.setUsedInGui(true);
+                return card.getImage();
+            }
+        }
+        for(Card card : getCard()[1].getCards()){
+            if(!card.isUsedInGui()){
+                card.setUsedInGui(true);
+                return card.getImage();
+            }
+        }
+        System.out.println("error: Class Person: Method GetLastCardImage: no card found");
         return getCard()[hand].getCards().get(getCard()[hand].getCards().size()-1).getImage();
     }
 

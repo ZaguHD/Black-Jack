@@ -7,7 +7,9 @@ package black.jack.src;
 
 import java.util.Arrays;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 
@@ -19,7 +21,9 @@ public class Player extends Person{
     
     /*Variable*/
     private IntegerProperty money = new SimpleIntegerProperty(1000);
-    private boolean splitted = false;
+    private boolean splitted = false; //for game
+    private BooleanProperty split = new SimpleBooleanProperty(false); //for gui
+    private BooleanProperty noSplit = new SimpleBooleanProperty(true); //for gui
     
     /*Constructor*/
 //    public Player(){
@@ -43,6 +47,24 @@ public class Player extends Person{
     public synchronized void setSplitted(boolean splitted) {
         this.splitted = splitted;
     }
+
+    public synchronized BooleanProperty getSplit() {
+        return split;
+    }
+
+    public synchronized void setSplit(boolean split) {
+        this.split.set(split);
+    }
+
+    public synchronized BooleanProperty getNoSplit() {
+        return noSplit;
+    }
+
+    public synchronized void setNoSplit(boolean split) {
+        this.noSplit.set(split);
+    }
+    
+    
     
     
     
@@ -59,9 +81,14 @@ public class Player extends Person{
     //Split
     public synchronized boolean doSplit(IntegerProperty moneyInGame){
         if(isSplitPossible() && moneyInGame.getValue()<=money.getValue()){
+           setSplit(true);
+            setNoSplit(false);
            doDouble(moneyInGame);
            getCard()[1].setCard(getCard()[0].getCards().get(1)); //split cards into two hands
            getCard()[0].setPoints(getCard()[0].getPoints()/2);
+           Platform.runLater(()->{
+                getCard()[0].setGuiPoints(getCard()[0].getPoints());
+           });
            getCard()[0].getCards().remove(1);
            getCard()[0].setStand(true);
            System.out.println("Splitted: now u can put into first hand");

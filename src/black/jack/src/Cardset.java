@@ -51,7 +51,7 @@ public class Cardset {
             for(Suit suit : Suit.values()){
                 for(Rank rank : Rank.values()){
                     cardset.add(new Card(suit,rank));
-                    System.out.println(cardset.get(cardset.size()-1).getName());
+                  //  System.out.println(cardset.get(cardset.size()-1).getName());
                 }  
             }
         }
