@@ -129,7 +129,11 @@ public class Game extends Thread{
         }
         player.setTurn(false); //User can't klick Buttons(Split etc.)
         player.setFinish(true);
-            while(!croupier.takeACard(cardset.getRandom(1))){
+            while((getPlayer().getCard()[0].getPoints() <= 21 
+                ||(getPlayer().getCard()[1].getPoints() <= 21 && getPlayer().getCard()[1].getPoints() !=0))){
+                if(croupier.takeACard(cardset.getRandom(1))){
+                   break; 
+                }
                 System.out.println("Croupier is taking a card");              
              try {
                 Thread.sleep(750); //Thread's sleeping

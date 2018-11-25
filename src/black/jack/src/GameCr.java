@@ -184,6 +184,7 @@ public class GameCr implements Initializable {
     
     private void setResultLabel(){
         resultHand.toFront();
+        resultHand.getStyleClass().clear();
         switch (game.getWinner()[0]) {
             case 1:
                 resultHand.setText("+"+game.getMoneyInHand1().getValue()*2);
