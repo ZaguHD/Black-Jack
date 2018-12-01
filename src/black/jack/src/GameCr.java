@@ -68,6 +68,9 @@ public class GameCr implements Initializable {
     @FXML
     ArrayList<Button> btnArray = new ArrayList<>();
     
+    @FXML
+    ArrayList<Label> resultArray = new ArrayList<>();
+            
     @FXML 
     AnchorPane playPane;
     
@@ -132,6 +135,9 @@ public class GameCr implements Initializable {
             btnArray.add(btnDouble);
             btnArray.add(btnTakeACard);
             btnArray.add(btnPass);
+            resultArray.add(resultHand);
+            resultArray.add(resultHand1);
+            resultArray.add(resultHand2);
             cardset = new Cardset();
         }
         game.setDaemon(true);
@@ -183,23 +189,34 @@ public class GameCr implements Initializable {
     }
     
     private void setResultLabel(){
-        resultHand.toFront();
-        resultHand.getStyleClass().clear();
-        switch (game.getWinner()[0]) {
-            case 1:
-                resultHand.setText("+"+game.getMoneyInHand1().getValue()*2);
-                resultHand.getStyleClass().add("wonLabel");
-                break;
-            case 2:
-                resultHand.getStyleClass().add("drawLabel");
-                resultHand.setText("Push");
-                break;
-            default:
-                resultHand.getStyleClass().add("lostLabel");
-                resultHand.setText("-"+game.getMoneyInHand1().getValue());
-                break;
+        int count = 1;
+        int index = 0;
+        int hand = 0;
+        if(game.getPlayer().isSplitted()){
+            count = 3;
+            index = 1;
         }
-        resultHand.setVisible(true);
+        while(index < count){
+            resultArray.get(index).toFront();
+            resultArray.get(index).getStyleClass().clear();
+            switch (game.getWinner()[hand++]) {
+                case 1:
+                    resultArray.get(index).setText("+"+game.getMoneyInHand1().getValue()*2);
+                    resultArray.get(index).getStyleClass().add("wonLabel");
+                    break;
+                case 2:
+                    resultArray.get(index).getStyleClass().add("drawLabel");
+                    resultArray.get(index).setText("Push");
+                    break;
+                default:
+                    resultArray.get(index).getStyleClass().add("lostLabel");
+                    resultArray.get(index).setText("-"+game.getMoneyInHand1().getValue());
+                    break;
+            }
+            resultArray.get(index).setVisible(true);   
+            index++;
+            }
+
     }
     
     @FXML
@@ -219,7 +236,9 @@ public class GameCr implements Initializable {
        pointsHand2.setVisible(false);
        pointsCroupier.setVisible(false);
        menuBar.setDisable(false);
-       resultHand.setVisible(false);
+       resultArray.forEach((label) -> {
+           label.setVisible(false);
+        });
        
         cardIndex = 0;
         System.out.println("hello");
@@ -385,21 +404,19 @@ public class GameCr implements Initializable {
     
     //Listener Methods to disable and able Buttons
     public void setListener(){
-          btnArray.forEach((btn) -> {
-            btn.visibleProperty().bindBidirectional(game.getPlayer().getTurn());
-          });
-          labelBankBalance.textProperty().bind(game.getPlayer().getMoney().asString());
-          menuBar.disableProperty().bindBidirectional(game.getPlayer().getFinish());
-          pointsHand1.visibleProperty().bindBidirectional(game.getPlayer().getSplit());
-          pointsHand2.visibleProperty().bindBidirectional(game.getPlayer().getSplit());
-          pointsHand.visibleProperty().bindBidirectional(game.getPlayer().getNoSplit());
-          //pointsHand.visibleProperty().bindBidirectional(game.getPlayer().getNoSplit());
-          
-            pointsHand.textProperty().bind(game.getPlayer().getCard()[0].getGuiPoints().asString());
-            pointsCroupier.textProperty().bind(game.getCroupier().getCard()[0].getGuiPoints().asString());
-            pointsHand1.textProperty().bindBidirectional(game.getPlayer().getCard()[0].getGuiPoints(),NumberFormat.getNumberInstance());
-           //pointsHand2.textProperty().bind(game.getPlayer().getCard()[1].getGuiPoints().asString());
-            pointsHand2.textProperty().bindBidirectional(game.getPlayer().getCard()[1].getGuiPoints(),NumberFormat.getNumberInstance());
+        btnArray.forEach((btn) -> {
+          btn.visibleProperty().bindBidirectional(game.getPlayer().getTurn());
+        });
+        labelBankBalance.textProperty().bind(game.getPlayer().getMoney().asString());
+        menuBar.disableProperty().bindBidirectional(game.getPlayer().getFinish());
+        pointsHand1.visibleProperty().bindBidirectional(game.getPlayer().getSplit());
+        pointsHand2.visibleProperty().bindBidirectional(game.getPlayer().getSplit());
+        pointsHand.visibleProperty().bindBidirectional(game.getPlayer().getNoSplit());
+
+        pointsHand.textProperty().bind(game.getPlayer().getCard()[0].getGuiPoints().asString());
+        pointsCroupier.textProperty().bind(game.getCroupier().getCard()[0].getGuiPoints().asString());
+        pointsHand1.textProperty().bindBidirectional(game.getPlayer().getCard()[0].getGuiPoints(),NumberFormat.getNumberInstance());
+        pointsHand2.textProperty().bindBidirectional(game.getPlayer().getCard()[1].getGuiPoints(),NumberFormat.getNumberInstance());
         
 
     }

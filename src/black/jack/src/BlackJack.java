@@ -47,12 +47,7 @@ public class BlackJack extends Application {
         gameCr.resultPane.setDisable(true);
         gameCr.resultPane.setOpacity(0);
         /* */
-        this.gameStage.show();   
-      //  gameCr.startAGame();
-        //gameCr.setListener();
-        
-//        gameCr.setBackground();
-        
+        this.gameStage.show();      
     }
 
     /**

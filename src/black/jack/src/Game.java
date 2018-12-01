@@ -109,7 +109,7 @@ public class Game extends Thread{
     private synchronized void prepareGame(){
        player.setTurn(true);
        for(int index = 0; index < 2; index ++){
-            player.takeACard(cardset.getRandom(1));
+            player.takeACard(cardset.getCard());
        }
        croupier.takeACard(cardset.getRandom(1));
     }
