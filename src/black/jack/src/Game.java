@@ -109,9 +109,13 @@ public class Game extends Thread{
     private synchronized void prepareGame(){
        player.setTurn(true);
        for(int index = 0; index < 2; index ++){
-            player.takeACard(cardset.getCard());
+            player.takeACard(cardset.getRandom(1));             
+       }       
+       if(player.getCard()[0].getPoints() ==21){
+           endGame = true;
+       }else{
+          croupier.takeACard(cardset.getRandom(1));   
        }
-       croupier.takeACard(cardset.getRandom(1));
     }
     
   
@@ -127,12 +131,20 @@ public class Game extends Thread{
             }
      
         }
+         try {
+        Thread.sleep(250); //Thread's sleeping
+            } catch (InterruptedException ex) {
+                System.out.println("Error: Thread Sleeping");
+        }
         player.setTurn(false); //User can't klick Buttons(Split etc.)
         player.setFinish(true);
-            while((getPlayer().getCard()[0].getPoints() <= 21 
-                ||(getPlayer().getCard()[1].getPoints() <= 21 && getPlayer().getCard()[1].getPoints() !=0))){
+            while(((getPlayer().getCard()[0].getPoints() <= 21 
+                ||(getPlayer().getCard()[1].getPoints() <= 21 
+                && getPlayer().getCard()[1].getPoints() !=0)))
+                && !(getPlayer().getCard()[0].getPoints() == 21 && getPlayer().getCard()[0].getCards().size() ==2 )){
+
                 if(croupier.takeACard(cardset.getRandom(1))){
-                   break; 
+                   break;                    
                 }
                 System.out.println("Croupier is taking a card");              
              try {

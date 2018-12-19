@@ -5,6 +5,7 @@
  */
 package black.jack.src;
 
+import black.jack.src.enumSrc.Rank;
 import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
@@ -22,6 +23,7 @@ public class MyCard {
     private int points;
     private IntegerProperty guiPoints = new SimpleIntegerProperty(0);
     private boolean stand = false;
+    private int numberOfAces = 0;
     
     /*Constructor*/
     
@@ -41,27 +43,44 @@ public class MyCard {
         this.cards = cards;
     }
     public synchronized boolean setCard(Card card){
-        points += card.getPoints(); //points added 
+        setPoints(getPoints()+card.getPoints()); //points added
+        cards.add(card); //Card added
+        if(getPoints() > 21){
+            getAce();
+        }
         Platform.runLater(()->{
             setGuiPoints(points);
         });
-        cards.add(card); //Card added
-        System.out.println("Card taked: "+card.getName() + " Points actually "+points );
-        if(points>=21){ //Points more than 21 -> user lost
+        if(getPoints()>=21){ //Points more than 21 -> user lost
             return true;
         }else{
             return false;
         }
     }
+    
+    public boolean getAce(){
+        int index = 0;
+        for(Card card : cards){
+            if(card.getRank() == Rank.ACE){
+                index ++;
+            }
+        }
+        if(index > numberOfAces){
+            numberOfAces++;
+            setPoints(getPoints()-10);
+            return true;
+        }
+        return false;
+    }
     public synchronized ArrayList<Card>  getCards() {
         return cards;
     }
     
-    public int getPoints() {
+    public synchronized int getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public synchronized void setPoints(int points) {
         this.points = points;
     }
 

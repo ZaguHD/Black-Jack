@@ -14,7 +14,11 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.Animation;
+import javafx.animation.FillTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -52,6 +56,7 @@ public class GameCr implements Initializable {
     private int yHand2;
     private int xCroupier = 345;
     private int yCroupier = 115;
+    private Timeline currentHandAnimation;
 
     @FXML
     ImageView background;
@@ -139,6 +144,7 @@ public class GameCr implements Initializable {
             resultArray.add(resultHand1);
             resultArray.add(resultHand2);
             cardset = new Cardset();
+            currentHand(pointsHand);
         }
         game.setDaemon(true);
         game.setCardset(cardset);
@@ -154,7 +160,6 @@ public class GameCr implements Initializable {
             while(game.isAlive()||paneListCroupier.size() != (game.getCroupier().getCard()[0].getCards().size())){
                   if(paneList.size() != (game.getPlayer().getCard()[0].getCards().size() + game.getPlayer().getCard()[1].getCards().size())){
                       Platform.runLater(()->{
-                        System.out.println("STAND IN Wait for anserws: "+game.getPlayer().getCard()[1].getHand());
                         takeCard(game.getPlayer().getCard()[1].getHand());
                     }); 
                   }else if(paneListCroupier.size() != (game.getCroupier().getCard()[0].getCards().size())){
@@ -259,20 +264,16 @@ public class GameCr implements Initializable {
     
     @FXML
     private void setMoney(ActionEvent event){
-        if(!game.isAlive()){ //When game isn't started 
+        String money = ((Button)event.getTarget()).getText(); //Numbers from Button id (Example: btn500 -> 500)
+        if(!game.isAlive() && Integer.parseInt(money) <= game.getPlayer().getMoney().getValue()){ //When game isn't started 
             pointsCroupier.setVisible(true);
             startAGame(); //start a game
             waitForAnserw();
-            String money = ((Button)event.getTarget()).getText(); //Numbers from Button id (Example: btn500 -> 500)
             oldValue = game.getPlayer().getMoney().getValue(); 
             newValue = oldValue - Integer.parseInt(money);
-            if(newValue >= 0){ //If user has more than or equals 0 
-                game.getPlayer().setMoney(newValue); 
-                game.setMoneyInHand1(Integer.parseInt(money));
-                //takeCard(2);
-            }else{
-                System.out.println("not enough money!");
-            }
+            game.getPlayer().setMoney(newValue); 
+            game.setMoneyInHand1(Integer.parseInt(money));
+
         }
     }
 
@@ -333,7 +334,9 @@ public class GameCr implements Initializable {
         System.out.println("STAND IN GAMER CR: "+game.getPlayer().getCard()[1].isStand());
         if(game.getPlayer().getCard()[1].isStand() && game.getPlayer().getCard()[1].getCards().size()==2){
              setX(xHand2);
-             setY(318-10);              
+             setY(318-10); 
+             currentHandAnimation.stop();
+             currentHand(pointsHand2);            
         }
 
         move.setToX(x);
@@ -378,7 +381,20 @@ public class GameCr implements Initializable {
            yHand2 = (int) move2.getToY() - 10;
 
         }));
+        currentHandAnimation.stop();
+        currentHand(pointsHand1);
      
+    }
+    
+    private void currentHand(Label lb){
+    currentHandAnimation = new Timeline(
+        new KeyFrame(Duration.seconds(1.0), evt -> lb.getStyleClass().clear()),
+        new KeyFrame(Duration.seconds(1.0), evt -> lb.getStyleClass().add("notCurrentPoints")),  
+        new KeyFrame(Duration.seconds(2.0), evt -> lb.getStyleClass().clear()),
+        new KeyFrame(Duration.seconds(2.0), evt -> lb.getStyleClass().add("currentPoints")) 
+    );
+    currentHandAnimation.setCycleCount(Animation.INDEFINITE);
+    currentHandAnimation.play();  
     }
     
     @FXML
@@ -417,19 +433,13 @@ public class GameCr implements Initializable {
         pointsCroupier.textProperty().bind(game.getCroupier().getCard()[0].getGuiPoints().asString());
         pointsHand1.textProperty().bindBidirectional(game.getPlayer().getCard()[0].getGuiPoints(),NumberFormat.getNumberInstance());
         pointsHand2.textProperty().bindBidirectional(game.getPlayer().getCard()[1].getGuiPoints(),NumberFormat.getNumberInstance());
-        
-
     }
-
-
     
 //    public void setBackground(){
 //        Image image = new Image("/black/jack/gui/blackjacktable.png");
 //        background.setImage(image);
 //    }
-    
-    
-    
+       
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

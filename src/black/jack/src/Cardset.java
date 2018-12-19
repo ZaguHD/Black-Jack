@@ -43,7 +43,19 @@ public class Cardset {
         cards[0]=cardset.get(1);
         return cards;
     } 
+
     
+    //For Test Balc Jack
+    public synchronized Card[] getAce(){
+        Card[] cards = new Card[2];
+        cards[0]=cardset.get(0);
+        return cards;
+    }    
+    public synchronized Card[] getTen(){
+        Card[] cards = new Card[2];
+        cards[0]=cardset.get(11);
+        return cards;
+    }     
 
     /*Methods*/
     public void makeSet() {

@@ -27,12 +27,30 @@
     -fx-background-color:  #cd5554;
 }
 
-#points{
+.points{
     -fx-background-radius: 5em;  
     -fx-border-width: 4;
-    -fx-border-color:  #313d4b;
+    -fx-border-color:  #065154;
     -fx-border-radius: 5em;
     -fx-background-color:  #cd5554;
+}
+
+.currentPoints{
+    -fx-background-radius: 5em;  
+    -fx-border-width: 4;
+    -fx-border-color:  #065154;
+    -fx-border-radius: 5em;
+    -fx-background-color:  #cd5554;
+}
+.notCurrentPoints{
+    -fx-background-radius: 5em;  
+    -fx-border-width: 4;
+    -fx-border-color:  gold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-border-radius: 5em;
+    -fx-background-color:  #cd5554;
+    -fx-border-style: dashed centered;
+    
 }
 
 

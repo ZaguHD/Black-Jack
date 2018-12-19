@@ -74,6 +74,22 @@ public  class Card {
         this.usedInGui = usedInGui;
     }
 
+    public Suit getSuit() {
+        return suit;
+    }
+
+    public void setSuit(Suit suit) {
+        this.suit = suit;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
     
     /*Methods*/     
     //Check if u have two the same Cards
