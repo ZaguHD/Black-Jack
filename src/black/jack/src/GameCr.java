@@ -62,7 +62,7 @@ public class GameCr implements Initializable {
     ImageView background;
     
     @FXML 
-    Button btnSplit,btnDouble,btnTakeACard,btnPass, okBtn;
+    Button btnSplit,btnDouble,btnTakeACard,btnPass, okBtn,btnStartGame;
     
     @FXML
     Button btn500,btn100,btn25,btn5,btn1;
@@ -77,7 +77,7 @@ public class GameCr implements Initializable {
     ArrayList<Label> resultArray = new ArrayList<>();
             
     @FXML 
-    AnchorPane playPane;
+    AnchorPane playPane, startGamePane;
     
     @FXML
     Pane resultPane,menuBar;
@@ -144,7 +144,6 @@ public class GameCr implements Initializable {
             resultArray.add(resultHand1);
             resultArray.add(resultHand2);
             cardset = new Cardset();
-            currentHand(pointsHand);
         }
         game.setDaemon(true);
         game.setCardset(cardset);
@@ -153,10 +152,11 @@ public class GameCr implements Initializable {
         game.getPlayer().setMoney(money);
     }
     private void waitForAnserw(){
+      
       Thread waitThread = new Thread(){
           @Override
            public void run(){
-
+            int hand = -1;
             while(game.isAlive()||paneListCroupier.size() != (game.getCroupier().getCard()[0].getCards().size())){
                   if(paneList.size() != (game.getPlayer().getCard()[0].getCards().size() + game.getPlayer().getCard()[1].getCards().size())){
                       Platform.runLater(()->{
@@ -167,7 +167,7 @@ public class GameCr implements Initializable {
                          takeCardCroupier();
                       }); 
                   }
-                  //System.out.println("hello: "+game.getCroupier().getCard()[0].getCards().size());
+                  hand = setCurrentHand(hand);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
@@ -180,19 +180,50 @@ public class GameCr implements Initializable {
                 Logger.getLogger(GameCr.class.getName()).log(Level.SEVERE, null, ex);
             }
             Platform.runLater(()->{
-                resultPane.setDisable(false);
-                    resultPane.setOpacity(100);
-                    setResultLabel();
+                    if(game.getPlayer().getMoney().getValue() == 0){
+                       startGamePane.setDisable(false);
+                       startGamePane.setVisible(true);
+                       playAgain(new ActionEvent());
+                    }else{
+                        resultPane.setDisable(false);
+                        resultPane.setOpacity(100);
+                        setResultLabel();   
+                    }
+                    currentHandAnimation.stop();
                 });
     
 
          }
       };
+      waitThread.setDaemon(true);
       waitThread.start();
       
+      
+
      
     }
-    
+    public int setCurrentHand(int hand){
+        if(game.getPlayer().getCard()[1].isStand() && hand !=2){
+            currentHandAnimation.stop();
+            pointsHand1.getStyleClass().clear();
+            pointsHand1.getStyleClass().add("points");
+            currentHand(pointsHand2);  
+            return hand=2;
+        }else if(game.getPlayer().getCard()[0].isStand() && hand !=1){
+            currentHandAnimation.stop();
+            pointsHand.getStyleClass().clear();
+            pointsHand1.getStyleClass().add("points");
+            currentHand(pointsHand1); 
+            return hand=1;
+        }else if(!game.getPlayer().isSplitted() && hand !=0){
+            //currentHandAnimation.stop();
+            pointsHand2.getStyleClass().clear();
+            pointsHand2.getStyleClass().add("points");
+            currentHand(pointsHand);
+            return hand=0;
+        }
+        return hand;
+    }
     private void setResultLabel(){
         int count = 1;
         int index = 0;
@@ -225,6 +256,14 @@ public class GameCr implements Initializable {
     }
     
     @FXML
+    private void startGame(ActionEvent event){
+        startGamePane.setDisable(true);
+        startGamePane.setVisible(false);
+        game.getPlayer().setMoney(1000); 
+    }
+    
+    
+    @FXML
     private void playAgain(ActionEvent event){
         paneList.forEach((pane) -> {
             playPane.getChildren().remove(pane);                 
@@ -246,7 +285,6 @@ public class GameCr implements Initializable {
         });
        
         cardIndex = 0;
-        System.out.println("hello");
         setX(475);
         setY(318);
         xCroupier = 345;
@@ -273,7 +311,6 @@ public class GameCr implements Initializable {
             newValue = oldValue - Integer.parseInt(money);
             game.getPlayer().setMoney(newValue); 
             game.setMoneyInHand1(Integer.parseInt(money));
-
         }
     }
 
@@ -335,10 +372,7 @@ public class GameCr implements Initializable {
         if(game.getPlayer().getCard()[1].isStand() && game.getPlayer().getCard()[1].getCards().size()==2){
              setX(xHand2);
              setY(318-10); 
-             currentHandAnimation.stop();
-             currentHand(pointsHand2);            
         }
-
         move.setToX(x);
         move.setToY(y);               
 
@@ -381,9 +415,6 @@ public class GameCr implements Initializable {
            yHand2 = (int) move2.getToY() - 10;
 
         }));
-        currentHandAnimation.stop();
-        currentHand(pointsHand1);
-     
     }
     
     private void currentHand(Label lb){

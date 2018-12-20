@@ -25,6 +25,7 @@
     -fx-border-color:  white;
     -fx-border-radius: 5em;
     -fx-background-color:  #cd5554;
+    -fx-border-style: dashed centered;
 }
 
 .points{
