@@ -72,6 +72,9 @@ public class Cardset {
     public synchronized Card[] getRandom(int numberOfCards){
         int random = (int) (Math.random() * cardset.size());
         Card[] cards = new Card[2];
+        if(cardset.isEmpty()){
+            makeSet();
+        }
         if(numberOfCards == 1){
             cards[0]=cardset.get(random);
             cardset.remove(random);

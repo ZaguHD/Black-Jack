@@ -31,7 +31,7 @@
 .points{
     -fx-background-radius: 5em;  
     -fx-border-width: 4;
-    -fx-border-color:  #065154;
+    -fx-border-color:  #313d4b;
     -fx-border-radius: 5em;
     -fx-background-color:  #cd5554;
 }
@@ -39,7 +39,7 @@
 .currentPoints{
     -fx-background-radius: 5em;  
     -fx-border-width: 4;
-    -fx-border-color:  #065154;
+    -fx-border-color:  #313d4b;
     -fx-border-radius: 5em;
     -fx-background-color:  #cd5554;
 }

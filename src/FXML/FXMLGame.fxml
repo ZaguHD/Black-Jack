@@ -11,6 +11,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="playPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #00c07f;" styleClass="mainFxmlClass" stylesheets="@../black/jack/css/fxmlgame.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="black.jack.src.GameCr">
    <children>
+      <ImageView fx:id="background" fitHeight="720.0" fitWidth="1280.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="cardSet" layoutX="147.0" layoutY="115.0">
          <image>
             <Image url="@../black/jack/gui/card_Pictures/cardBack.png" />

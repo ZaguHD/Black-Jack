@@ -466,10 +466,11 @@ public class GameCr implements Initializable {
         pointsHand2.textProperty().bindBidirectional(game.getPlayer().getCard()[1].getGuiPoints(),NumberFormat.getNumberInstance());
     }
     
-//    public void setBackground(){
-//        Image image = new Image("/black/jack/gui/blackjacktable.png");
-//        background.setImage(image);
-//    }
+    public void setBackground(){
+        Image image = new Image("/black/jack/gui/background.jpg");
+      
+        background.setImage(image);
+    }
        
     
     @Override
