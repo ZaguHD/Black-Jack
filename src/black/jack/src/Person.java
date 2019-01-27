@@ -61,7 +61,9 @@ public abstract class Person {
     public synchronized void setTurn(boolean turn) {
         this.turn.set(turn);
     }
-
+    public synchronized void setTurnUnder(boolean turn) {
+        this.turn.set(turn);
+    }
  
 
     

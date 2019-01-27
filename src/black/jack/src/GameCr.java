@@ -203,19 +203,23 @@ public class GameCr implements Initializable {
      
     }
     public int setCurrentHand(int hand){
+        
         if(game.getPlayer().getCard()[1].isStand() && hand !=2){
+            System.out.println("1");
             currentHandAnimation.stop();
             pointsHand1.getStyleClass().clear();
             pointsHand1.getStyleClass().add("points");
             currentHand(pointsHand2);  
             return hand=2;
         }else if(game.getPlayer().getCard()[0].isStand() && hand !=1){
+            System.out.println("2");
             currentHandAnimation.stop();
             pointsHand.getStyleClass().clear();
             pointsHand1.getStyleClass().add("points");
             currentHand(pointsHand1); 
             return hand=1;
         }else if(!game.getPlayer().isSplitted() && hand !=0){
+            System.out.println("3");
             //currentHandAnimation.stop();
             pointsHand2.getStyleClass().clear();
             pointsHand2.getStyleClass().add("points");
@@ -451,9 +455,13 @@ public class GameCr implements Initializable {
     
     //Listener Methods to disable and able Buttons
     public void setListener(){
-        btnArray.forEach((btn) -> {
-          btn.visibleProperty().bindBidirectional(game.getPlayer().getTurn());
-        });
+//        btnArray.forEach((btn) -> {
+//          btn.visibleProperty().bindBidirectional(game.getPlayer().getTurn());
+//        });
+        btnSplit.visibleProperty().bindBidirectional(game.getPlayer().getSplitable());
+        btnDouble.visibleProperty().bindBidirectional(game.getPlayer().getDoubleable());
+        btnTakeACard.visibleProperty().bindBidirectional(game.getPlayer().getHittable());
+        btnPass.visibleProperty().bindBidirectional(game.getPlayer().getPassable());
         labelBankBalance.textProperty().bind(game.getPlayer().getMoney().asString());
         menuBar.disableProperty().bindBidirectional(game.getPlayer().getFinish());
         pointsHand1.visibleProperty().bindBidirectional(game.getPlayer().getSplit());
@@ -464,11 +472,11 @@ public class GameCr implements Initializable {
         pointsCroupier.textProperty().bind(game.getCroupier().getCard()[0].getGuiPoints().asString());
         pointsHand1.textProperty().bindBidirectional(game.getPlayer().getCard()[0].getGuiPoints(),NumberFormat.getNumberInstance());
         pointsHand2.textProperty().bindBidirectional(game.getPlayer().getCard()[1].getGuiPoints(),NumberFormat.getNumberInstance());
+       
     }
     
     public void setBackground(){
-        Image image = new Image("/black/jack/gui/background.jpg");
-      
+        Image image = new Image("/black/jack/gui/background1.png");
         background.setImage(image);
     }
        

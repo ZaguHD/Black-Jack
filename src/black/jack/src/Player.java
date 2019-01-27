@@ -25,6 +25,11 @@ public class Player extends Person{
     private BooleanProperty split = new SimpleBooleanProperty(false); //for gui
     private BooleanProperty noSplit = new SimpleBooleanProperty(true); //for gui
     
+    private BooleanProperty splitable = new SimpleBooleanProperty(false); //disable and enable Splut button 
+    private BooleanProperty passable = new SimpleBooleanProperty(false); //disable and enable Splut button 
+    private BooleanProperty doubleable = new SimpleBooleanProperty(false); //disable and enable Splut button 
+    private BooleanProperty hittable = new SimpleBooleanProperty(false); //disable and enable Splut button 
+    
     /*Constructor*/
 //    public Player(){
 //        money.set(1000);
@@ -63,8 +68,73 @@ public class Player extends Person{
     public synchronized void setNoSplit(boolean split) {
         this.noSplit.set(split);
     }
+
+    public BooleanProperty getSplitable() {
+        return splitable;
+    }
+
+    public synchronized void setSplitable(boolean splitable) {
+        this.splitable.setValue(splitable);
+    }
+
+    public synchronized BooleanProperty getPassable() {
+        return passable;
+    }
+
+    public synchronized void setPassable(BooleanProperty passable) {
+        this.passable = passable;
+    }
+
+    public synchronized BooleanProperty getDoubleable() {
+        return doubleable;
+    }
+
+    public synchronized void setDoubleable(BooleanProperty doubleable) {
+        this.doubleable = doubleable;
+    }
+
+    public synchronized BooleanProperty getHittable() {
+        return hittable;
+    }
+
+    public synchronized void setHittable(BooleanProperty hittable) {
+        this.hittable = hittable;
+    }
     
+
+    @Override
+    public synchronized void setTurn(boolean turn){
+        setTurnUnder(turn);
+        if(turn == false){
+            splitable.set(turn);
+            doubleable.set(turn);
+            hittable.set(turn);
+            passable.set(turn);            
+        }else{
+            hittable.set(turn);
+            passable.set(turn);   
+        }
+    }
     
+    public synchronized void checkSplitableAndDoubleable(IntegerProperty moneyInGame){
+        if(moneyInGame.getValue()<=money.getValue()){
+            if(card[0].getCards().size() == 2 && (card[1].getCards().isEmpty())
+             && card[0].getCards().get(0).getPoints() == card[0].getCards().get(1).getPoints()){
+                splitable.set(true);
+            }else{
+                splitable.set(false);
+            }
+            if(card[0].getCards().size() == 2 && (card[1].getCards().isEmpty())){
+                doubleable.set(true);
+            }else{
+                doubleable.set(false);
+            }
+        }else{
+           doubleable.set(false);
+           splitable.set(false);
+        }
+        
+    }
     
     
     

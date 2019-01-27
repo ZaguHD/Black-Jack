@@ -109,8 +109,9 @@ public class Game extends Thread{
     private synchronized void prepareGame(){
        player.setTurn(true);
        for(int index = 0; index < 2; index ++){
-            player.takeACard(cardset.getRandom(1));             
+            player.takeACard(cardset.getRandom(1));
        }       
+       player.checkSplitableAndDoubleable(getMoneyInHand1());
        if(player.getCard()[0].getPoints() ==21){
            endGame = true;
        }else{
@@ -158,6 +159,7 @@ public class Game extends Thread{
     }
     //User klicked a Button 
     private synchronized boolean makeaMove(){
+        player.checkSplitableAndDoubleable(getMoneyInHand1());
         if(getMove().equals("btnPass")){ // User klicked Pass
             setMove("");                 // String to ""
             System.out.println("Pass");  // Sout
